@@ -6,7 +6,7 @@ public abstract class Scorer {
 	public int[][] Data; //assumes: the last column is disease (states 0 through diseaseStates), snps are the columns, every entry is 0 or 1
 	public int M; //the number of samples
 	public int N; //the number of snps
-	private int numConfigurations; //this is the number of parental configurations.  It is only updated after a call to getLikelihood().
+	private int numConfigurations; //this is the number of parental configurations.  It is only updated after a call to getParentConfigurationCounts().
 	public int AlleleStates;
 	public int DiseaseStates;
 	
@@ -42,11 +42,6 @@ public abstract class Scorer {
 				njk = njk+0.0000001; //add a very small epsilon in case njk=0.
 				likelihood=likelihood+njk*Math.log(njk/nj);
 			}
-		}
-		numConfigurations = configCounts.size();
-		if(numConfigurations == 0)
-		{
-			numConfigurations = 1; //if there are no parents, then there is one configuration.
 		}
 		return likelihood;
 	}
@@ -92,6 +87,11 @@ public abstract class Scorer {
 			{
 				leaves.add(current);
 			}
+		}
+		numConfigurations = leaves.size();
+		if(numConfigurations == 0)
+		{
+			numConfigurations = 1; //if there are no parents, then there is one configuration.
 		}
 		return leaves;
 	}

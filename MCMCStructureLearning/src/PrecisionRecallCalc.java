@@ -16,8 +16,10 @@ public class PrecisionRecallCalc {
 		int truePositives = getNumTruePositives(learned, standard);
 		double precision = truePositives/learned.size();
 		double recall = truePositives/standard.size();
+		double distance = Math.sqrt(Math.pow(1-precision, 2)+Math.pow(1-recall, 2));
 		System.out.println("Precision: "+precision);
 		System.out.println("Recall: "+recall);
+		System.out.println("Distance from perfect precision and recall: "+distance);
 	}
 	
 	public static int getNumTruePositives(ArrayList<Integer> learned, ArrayList<Integer> standard)

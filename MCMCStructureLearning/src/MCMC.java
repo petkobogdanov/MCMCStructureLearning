@@ -33,6 +33,9 @@ public abstract class MCMC {
 			int runningSteps = 0;
 			int diseaseStates = 0;
 			int alleleStates = 0;
+			
+			int alpha = 0; // for BDeu Score
+			
 			try{
 				mixingSteps = Integer.parseInt(args[1]);
 				runningSteps = Integer.parseInt(args[2]);
@@ -53,6 +56,10 @@ public abstract class MCMC {
 			else if(args[0].equals("BIC"))
 			{
 				s = new BIC(data, alleleStates, diseaseStates);
+			}
+			else if(args[0].equals("BDeu"))
+			{
+				s = new BDeu(data, alleleStates, diseaseStates, alpha);
 			}
 			else
 			{

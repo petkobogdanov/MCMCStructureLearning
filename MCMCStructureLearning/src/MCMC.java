@@ -1,3 +1,6 @@
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
@@ -8,9 +11,9 @@ public abstract class MCMC {
 	
 	public static void main(String[] args)
 	{
-		if(args.length < 6)
+		if(args.length < 7)
 		{
-			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data file>");
+			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data file> <output file>");
 			return;
 		}
 		//parse data
@@ -52,16 +55,26 @@ public abstract class MCMC {
 			}
 			if(mixingSteps >= 0 && runningSteps > 0 && diseaseStates > 1)
 			{
-				//calculate posterior probability of each edge
-				int[] snpCounts = RunMC(mixingSteps, runningSteps, s, numSNPs, diseaseStates);
-				for(int i = 0; i < snpCounts.length; i++)
+				//calculate posterior probability of each edge and print to output file
+				PrintWriter out;
+				try 
 				{
-					//print out snps that have a posterior probability greater than 0
-					if(snpCounts[i] > 0)
+					out = new PrintWriter(new FileWriter(args[6]));
+					int[] snpCounts = RunMC(mixingSteps, runningSteps, s, numSNPs, diseaseStates);
+					for(int i = 0; i < snpCounts.length; i++)
 					{
-						System.out.println(Integer.toString(i) + ": " + Double.toString((double)snpCounts[i]/runningSteps));
+						//print out snps that have a posterior probability greater than 0
+						if(snpCounts[i] > 0)
+						{
+							out.println(Integer.toString(i) + ": " + Double.toString((double)snpCounts[i]/runningSteps));
+						}
 					}
-				}
+					out.close();
+				} 
+				catch (IOException e) 
+				{
+					System.out.println("Can not write to file.");
+				} 
 			}
 		}
 		return;

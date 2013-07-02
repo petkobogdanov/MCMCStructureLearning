@@ -50,11 +50,11 @@ public abstract class MCMC {
 			Scorer s = null;
 			if(args[0].equals("AIC"))
 			{
-				s = new AIC(data, alleleStates, diseaseStates);
+				s = new AIC(data, alleleStates, diseaseStates, alpha);
 			}
 			else if(args[0].equals("BIC"))
 			{
-				s = new BIC(data, alleleStates, diseaseStates);
+				s = new BIC(data, alleleStates, diseaseStates, alpha);
 			}
 			else if(args[0].equals("BDeu"))
 			{

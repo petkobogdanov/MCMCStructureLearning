@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class AIC extends Scorer{
 
-	public AIC(int[][] data, int alleleStates, int diseaseStates) {
-		super(data, alleleStates, diseaseStates);
+	public AIC(int[][] data, int alleleStates, int diseaseStates, double a) {
+		super(data, alleleStates, diseaseStates, a);
 	}
 
 	@Override

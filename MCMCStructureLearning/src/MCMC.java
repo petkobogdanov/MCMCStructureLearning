@@ -13,13 +13,13 @@ public abstract class MCMC {
 	{
 		if(args.length < 7)
 		{
-			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file>");
+			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file> <alpha>");
 			return;
 		}
 		//parse data
 		Parser p = new Parser();
-		String[] files = new String[args.length-6];
-		for(int i = 5; i < args.length-1;i++)
+		String[] files = new String[args.length-7];
+		for(int i = 5; i < args.length-2;i++)
 		{
 			files[i-5] = args[i];
 		}
@@ -33,8 +33,7 @@ public abstract class MCMC {
 			int runningSteps = 0;
 			int diseaseStates = 0;
 			int alleleStates = 0;
-			
-			int alpha = 0; // for BDeu Score
+			double alpha = 0;
 			
 			try{
 				mixingSteps = Integer.parseInt(args[1]);

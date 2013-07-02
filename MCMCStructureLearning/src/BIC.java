@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 public class BIC extends Scorer{
 
-	public BIC(int[][] data, int alleleStates, int diseaseStates) {
-		super(data, alleleStates, diseaseStates);
+	public BIC(int[][] data, int alleleStates, int diseaseStates, double a) {
+		super(data, alleleStates, diseaseStates, a);
 	}
 
 	@Override

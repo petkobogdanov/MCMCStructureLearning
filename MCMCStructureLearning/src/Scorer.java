@@ -9,8 +9,9 @@ public abstract class Scorer {
 	private int numConfigurations; //this is the number of parental configurations.  It is only updated after a call to getParentConfigurationCounts().
 	public int AlleleStates;
 	public int DiseaseStates;
+	public double alpha;
 	
-	public Scorer(int[][] data, int alleleStates, int diseaseStates)
+	public Scorer(int[][] data, int alleleStates, int diseaseStates, double a)
 	{
 		Data = data;
 		Data = data;
@@ -18,6 +19,7 @@ public abstract class Scorer {
 		N=data[0].length - 1; //we assume that each column is a SNP except the last column
 		AlleleStates = alleleStates;
 		DiseaseStates = diseaseStates;
+		alpha=a;
 	}
 	
 	public int getNumConfigurations()
@@ -46,7 +48,7 @@ public abstract class Scorer {
 		return likelihood;
 	}
 	
-	private ArrayList<TreeNode> getParentConfigurationCounts(ArrayList<Integer> parents) {
+	public ArrayList<TreeNode> getParentConfigurationCounts(ArrayList<Integer> parents) {
 		//this builds a tree where each level is a snp and each node is a value that snp can 
 		//be (it assumes they can only have two values), so each parent configuration is a path 
 		//from the root to a leaf.  The leaves contain counts of how many times the parent 

@@ -13,14 +13,20 @@ public abstract class MCMC {
 	{
 		if(args.length < 7)
 		{
-			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data file> <output file>");
+			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file>");
 			return;
 		}
 		//parse data
 		Parser p = new Parser();
-		int[][] data = p.Parse(args[5]);
+		String[] files = new String[args.length-6];
+		for(int i = 5; i < args.length-1;i++)
+		{
+			files[i-5] = args[i];
+		}
+		int[][] data = p.Parse(files);
 		if(data != null)
 		{
+			System.out.println("Number of snps: "+(data[0].length - 1));
 			int numSNPs = data[0].length - 1;
 			//parse integer arguments
 			int mixingSteps = 0;
@@ -59,7 +65,7 @@ public abstract class MCMC {
 				PrintWriter out;
 				try 
 				{
-					out = new PrintWriter(new FileWriter(args[6]));
+					out = new PrintWriter(new FileWriter(args[args.length-1]));
 					int[] snpCounts = RunMC(mixingSteps, runningSteps, s, numSNPs, diseaseStates);
 					for(int i = 0; i < snpCounts.length; i++)
 					{

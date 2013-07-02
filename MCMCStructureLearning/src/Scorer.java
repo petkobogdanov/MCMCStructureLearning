@@ -98,6 +98,7 @@ public abstract class Scorer {
 		return leaves;
 	}
 
-	abstract double Score(ArrayList<Integer> parents);
+	abstract double score(ArrayList<Integer> parents);
+	abstract double getProbOfData(double score);
 
 }

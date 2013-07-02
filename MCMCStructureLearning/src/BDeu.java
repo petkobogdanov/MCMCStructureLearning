@@ -14,7 +14,7 @@ public class BDeu extends Scorer{
 	// produces the BDeu score of the BN where q=number of configurations, r=DiseaseStates, 
 	// s=number of times parents takes jth configuration and X=k
 	
-	double Score(ArrayList<Integer> parents) {
+	double score(ArrayList<Integer> parents) {
 		double score = 1;
 		double term1=0, term2=1, NJK = 0;
 		
@@ -48,6 +48,11 @@ public class BDeu extends Scorer{
 		return score;
 		
 		
+	}
+
+	@Override
+	double getProbOfData(double score) {
+		return score;
 	}
 
 }

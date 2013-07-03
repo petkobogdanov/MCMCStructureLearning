@@ -40,6 +40,7 @@ public abstract class MCMC {
 				runningSteps = Integer.parseInt(args[2]);
 				diseaseStates = Integer.parseInt(args[3]);
 				alleleStates = Integer.parseInt(args[4]);
+				alpha = Double.parseDouble(args[args.length-1]);
 			}
 			catch(NumberFormatException e)
 			{

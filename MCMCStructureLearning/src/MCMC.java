@@ -11,7 +11,7 @@ public abstract class MCMC {
 	
 	public static void main(String[] args)
 	{
-		if(args.length < 7)
+		if(args.length < 8)
 		{
 			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file> <alpha>");
 			return;
@@ -40,6 +40,7 @@ public abstract class MCMC {
 				runningSteps = Integer.parseInt(args[2]);
 				diseaseStates = Integer.parseInt(args[3]);
 				alleleStates = Integer.parseInt(args[4]);
+				alpha = Double.parseDouble(args[args.length-1]);
 			}
 			catch(NumberFormatException e)
 			{
@@ -71,7 +72,7 @@ public abstract class MCMC {
 				PrintWriter out;
 				try 
 				{
-					out = new PrintWriter(new FileWriter(args[args.length-1]));
+					out = new PrintWriter(new FileWriter(args[args.length-2]));
 					int[] snpCounts = RunMC(mixingSteps, runningSteps, s, numSNPs, diseaseStates);
 					for(int i = 0; i < snpCounts.length; i++)
 					{

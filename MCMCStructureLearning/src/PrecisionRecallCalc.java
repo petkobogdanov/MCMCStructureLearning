@@ -17,8 +17,17 @@ public class PrecisionRecallCalc {
 		ArrayList<Integer> learned = p.parse(args[0]);
 		ArrayList<Integer> standard = p.parse(args[1]);
 		int truePositives = getNumTruePositives(learned, standard);
-		double precision = truePositives/learned.size();
-		double recall = truePositives/standard.size();
+		String error = null;
+		double precision = 0;
+		if(learned.size() == 0)
+		{
+			error = "No SNPs were accepted.";
+		}
+		else
+		{
+			precision = (double)truePositives/learned.size();
+		}
+		double recall = (double)truePositives/standard.size();
 		double distance = Math.sqrt(Math.pow(1-precision, 2)+Math.pow(1-recall, 2));
 		PrintWriter out;
 		try 
@@ -27,6 +36,10 @@ public class PrecisionRecallCalc {
 			out.println("Precision: "+precision);
 			out.println("Recall: "+recall);
 			out.println("Distance from perfect precision and recall: "+distance);
+			if(error != null)
+			{
+				out.println(error);
+			}
 			out.close();
 		} 
 		catch (IOException e) 

@@ -37,11 +37,13 @@ public class Parser {
 		    	}
 		    	rowLength++; //now add the one col for disease state
 	    		int[] row = new int[rowLength];
+	    		int rowIndex = 0;
 	    		for(int i = 0; i < stringArrs.length; i++)
 	    		{
-	    			for(int j = 0; j < stringArrs[i].length-1; j++)
+	    			for(int j = 0; j < (stringArrs[i].length-1); j++)
 		    		{
-		    			row[i*(stringArrs[i].length-1)+j] = Integer.parseInt(stringArrs[i][j]);
+		    			row[rowIndex] = Integer.parseInt(stringArrs[i][j]);
+		    			rowIndex++;
 		    		}
 	    		}
 	    		row[row.length-1] = Integer.parseInt(stringArrs[0][stringArrs[0].length-1]); //add the disease state

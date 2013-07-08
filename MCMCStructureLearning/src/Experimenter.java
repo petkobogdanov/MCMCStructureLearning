@@ -5,6 +5,8 @@ public class Experimenter {
 	
 	private static int MixingSteps = 10000;
 	private static int RunningSteps = 100000;
+	private static boolean AIC = false;
+	private static boolean BIC = false;
 
 	public static void main(String[] args) {
 		//takes a path to a directory containing folders of data sets and a list of at least one file name
@@ -25,6 +27,7 @@ public class Experimenter {
 		String[] dataFiles;
 		String[] scoringMethods;
 		double[] alphas = null;
+		int numAlphas = 0;
 		try{
 			numDataFiles = Integer.parseInt(args[3]);
 			dataFiles = new String[numDataFiles];
@@ -32,19 +35,45 @@ public class Experimenter {
 			{
 				dataFiles[i] = args[i+4];
 			}
+			int numScoringMethods = 0;
+			if(AIC && BIC)
+			{
+				numScoringMethods = 2;
+			}
+			else if(AIC || BIC)
+			{
+				numScoringMethods = 1;
+			}
 			if(args.length > (7+dataFiles.length))
 			{ //we have some alpha values
-				alphas = new double[args.length-(7+dataFiles.length)];
-				scoringMethods = new String[2+alphas.length];
-				for(int i = 0; i < alphas.length; i++)
-				{
-					alphas[i] = Double.parseDouble(args[i+7+dataFiles.length]);
-					scoringMethods[i+2] = "BDeu";
-				}
+				numAlphas = args.length-(7+dataFiles.length);
+				alphas = new double[numAlphas];
+				numScoringMethods += numAlphas;
 			}
-			else
+			scoringMethods = new String[numScoringMethods];
+			for(int i = 0; i < numAlphas; i++)
 			{
-				scoringMethods = new String[2]; //just use AIC and BIC
+				alphas[i] = Double.parseDouble(args[i+7+dataFiles.length]);
+				scoringMethods[i] = "BDeu";
+			}
+			if (AIC || BIC)
+			{
+				if(AIC && BIC)
+				{ // use AIC and BIC
+					scoringMethods[numAlphas] = "AIC";
+					scoringMethods[numAlphas+1] = "BIC";
+				}
+				else
+				{
+					if(AIC)
+					{
+						scoringMethods[numAlphas] = "AIC";
+					}
+					else
+					{
+						scoringMethods[numAlphas] = "BIC";
+					}
+				}
 			}
 		}
 		catch(NumberFormatException e)
@@ -52,8 +81,6 @@ public class Experimenter {
 			System.out.println("Can not parse number argument.");
 			return;
 		}
-		scoringMethods[0] = "AIC";
-		scoringMethods[1] = "BIC";
 		//loop through each folder and run one trial per scoring method on each folder's data
 		File parent = new File(pathToData);
 		for (File trialFolder : parent.listFiles())
@@ -87,8 +114,8 @@ public class Experimenter {
 				String networkOutputFile = networkOutputFolder.getAbsolutePath()+"\\"+scoringMethods[i];
 				if(scoringMethods[i].equals("BDeu"))
 				{
-					networkOutputFile=networkOutputFile+"_"+Double.toString(alphas[i-2]);
-					mcmcArgs[mcmcArgs.length-1] = Double.toString(alphas[i-2]);
+					networkOutputFile=networkOutputFile+"_"+Double.toString(alphas[i]);
+					mcmcArgs[mcmcArgs.length-1] = Double.toString(alphas[i]);
 				}
 				else
 				{
@@ -102,7 +129,7 @@ public class Experimenter {
 				String finalOutputFile = finalOutputFolder.getAbsolutePath()+"\\"+scoringMethods[i];
 				if(scoringMethods[i].equals("BDeu"))
 				{
-					finalOutputFile=finalOutputFile+"_"+Double.toString(alphas[i-2]);
+					finalOutputFile=finalOutputFile+"_"+Double.toString(alphas[i]);
 				}
 				prcArgs[0] = networkOutputFile;
 				prcArgs[1] = args[args.length-2-alphas.length];

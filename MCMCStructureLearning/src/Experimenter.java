@@ -3,10 +3,11 @@ import java.io.File;
 
 public class Experimenter {
 	
-	private static int MixingSteps = 10000;
+	private static int MixingSteps = 20000;
 	private static int RunningSteps = 100000;
 	private static boolean AIC = false;
 	private static boolean BIC = false;
+	private static boolean RandomScore = false;
 
 	public static void main(String[] args) {
 		//takes a path to a directory containing folders of data sets and a list of at least one file name
@@ -36,13 +37,17 @@ public class Experimenter {
 				dataFiles[i] = args[i+4];
 			}
 			int numScoringMethods = 0;
-			if(AIC && BIC)
+			if(AIC)
 			{
-				numScoringMethods = 2;
+				numScoringMethods++;
 			}
-			else if(AIC || BIC)
+			if(BIC)
 			{
-				numScoringMethods = 1;
+				numScoringMethods++;
+			}
+			if(RandomScore)
+			{
+				numScoringMethods++;
 			}
 			if(args.length > (7+dataFiles.length))
 			{ //we have some alpha values
@@ -56,30 +61,27 @@ public class Experimenter {
 				alphas[i] = Double.parseDouble(args[i+7+dataFiles.length]);
 				scoringMethods[i] = "BDeu";
 			}
-			if (AIC || BIC)
-			{
-				if(AIC && BIC)
-				{ // use AIC and BIC
-					scoringMethods[numAlphas] = "AIC";
-					scoringMethods[numAlphas+1] = "BIC";
-				}
-				else
-				{
-					if(AIC)
-					{
-						scoringMethods[numAlphas] = "AIC";
-					}
-					else
-					{
-						scoringMethods[numAlphas] = "BIC";
-					}
-				}
-			}
 		}
 		catch(NumberFormatException e)
 		{
 			System.out.println("Can not parse number argument.");
 			return;
+		}
+		int nextIndex = alphas.length; //this keeps track of where our next method goes in scoringMethods
+		if(AIC)
+		{
+			scoringMethods[nextIndex] = "AIC";
+			nextIndex++;
+		}
+		if(BIC)
+		{
+			scoringMethods[nextIndex] = "BIC";
+			nextIndex++;
+		}
+		if(RandomScore)
+		{
+			scoringMethods[nextIndex] = "Random";
+			nextIndex++;
 		}
 		//loop through each folder and run one trial per scoring method on each folder's data
 		File parent = new File(pathToData);

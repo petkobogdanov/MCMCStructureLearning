@@ -61,6 +61,10 @@ public abstract class MCMC {
 			{
 				s = new BDeu(data, alleleStates, diseaseStates, alpha);
 			}
+			else if(args[0].equals("Random"))
+			{
+				s = new RandomScorer(data, alleleStates, diseaseStates, alpha);
+			}
 			else
 			{
 				System.out.println("Scoring method does not exist.");

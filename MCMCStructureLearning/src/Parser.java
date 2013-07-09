@@ -5,11 +5,16 @@ import java.util.ArrayList;
 
 public class Parser {
 	
-	public int[][] Parse(String[] filePaths)
+	
+	public int[][] Parse(String[] filePaths, boolean useFirst)
 	{
 		//assumes file format is: each row is a sample, each column is a snp, except the last, 
 		//which is the disease column, each entry separated by a single space
-		//all files must have the same number of lines
+		//if useFirst is true, then it assumes there is data on the first line, otherwise it skips the 
+		//first line of each file.
+		//all files must have the same number of lines and contain the disease state in the last column
+		//if multiple files are passed in, it will concatenate them into one large data set with the disease 
+		//state in the last column only
 		int[][] finalData = null;
 		try
 		{
@@ -22,6 +27,7 @@ public class Parser {
 		    }
 		    String[] strLines = new String[filePaths.length];
 		    //Read Files Line By Line
+		    boolean firstLine = true;
 		    while ((strLines[0] = brs[0].readLine()) != null)   
 		    {
 		    	String[] stringArrs[] = new String[filePaths.length][];
@@ -32,8 +38,12 @@ public class Parser {
 		    		{
 		    			strLines[i] = brs[i].readLine();
 		    		}
-		    		stringArrs[i] = strLines[i].split(" ");
-		    		rowLength+=stringArrs[i].length-1; //subtract 1 because the last col is the disease state
+		    		if(useFirst || !firstLine)
+		    		{
+		    			stringArrs[i] = strLines[i].split(" ");
+		    			rowLength+=stringArrs[i].length-1; //subtract 1 because the last col is the disease state
+		    			firstLine = false;
+		    		}
 		    	}
 		    	rowLength++; //now add the one col for disease state
 	    		int[] row = new int[rowLength];

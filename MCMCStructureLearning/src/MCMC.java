@@ -11,19 +11,34 @@ public abstract class MCMC {
 	
 	public static void main(String[] args)
 	{
-		if(args.length < 8)
+		if(args.length < 9)
 		{
-			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file> <alpha>");
+			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <use first line: t/f> <output file> <alpha>");
 			return;
 		}
 		//parse data
+		boolean useFirstLine;
+		String useFirst = args[args.length-3];
+		if(useFirst.equals("t") || useFirst.equals("T") || useFirst.equals("true") || useFirst.equals("True"))
+		{
+			useFirstLine = true;
+		}
+		else if(useFirst.equals("f") || useFirst.equals("F") || useFirst.equals("false") || useFirst.equals("False"))
+		{
+			useFirstLine = false;
+		}
+		else
+		{
+			System.out.println("Can not parse t/f argument for using first line.");
+			return;
+		}
 		Parser p = new Parser();
-		String[] files = new String[args.length-7];
-		for(int i = 5; i < args.length-2;i++)
+		String[] files = new String[args.length-8];
+		for(int i = 5; i < args.length-3;i++)
 		{
 			files[i-5] = args[i];
 		}
-		int[][] data = p.Parse(files);
+		int[][] data = p.Parse(files, useFirstLine);
 		if(data != null)
 		{
 			System.out.println("Number of snps: "+(data[0].length - 1));

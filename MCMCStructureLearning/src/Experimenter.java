@@ -8,6 +8,7 @@ public class Experimenter {
 	private static boolean AIC = false;
 	private static boolean BIC = false;
 	private static boolean RandomScore = false;
+	private static boolean UseFirstLine = true; //whether or not to use the first line of the Data files
 
 	public static void main(String[] args) {
 		//takes a path to a directory containing folders of data sets and a list of at least one file name
@@ -102,8 +103,8 @@ public class Experimenter {
 			for(int i = 0; i < scoringMethods.length; i++)
 			{
 				//run MCMC
-				//args to MCMC: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <output file> <alpha>
-				String[] mcmcArgs = new String[7+trialDataFiles.length];
+				//args to MCMC: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <use first line: t/f> <output file> <alpha>
+				String[] mcmcArgs = new String[8+trialDataFiles.length];
 				mcmcArgs[0] = scoringMethods[i];
 				mcmcArgs[1] = Integer.toString(MixingSteps);
 				mcmcArgs[2] = Integer.toString(RunningSteps);
@@ -113,6 +114,7 @@ public class Experimenter {
 				{
 					mcmcArgs[j+5] = trialDataFiles[j];
 				}
+				mcmcArgs[mcmcArgs.length-3] = Boolean.toString(UseFirstLine);
 				String networkOutputFile = networkOutputFolder.getAbsolutePath()+"\\"+scoringMethods[i];
 				if(scoringMethods[i].equals("BDeu"))
 				{

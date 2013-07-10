@@ -42,22 +42,28 @@ public class Parser {
 		    		{
 		    			stringArrs[i] = strLines[i].split(" ");
 		    			rowLength+=stringArrs[i].length-1; //subtract 1 because the last col is the disease state
-		    			firstLine = false;
 		    		}
 		    	}
-		    	rowLength++; //now add the one col for disease state
-	    		int[] row = new int[rowLength];
-	    		int rowIndex = 0;
-	    		for(int i = 0; i < stringArrs.length; i++)
-	    		{
-	    			for(int j = 0; j < (stringArrs[i].length-1); j++)
+		    	if(useFirst || !firstLine)
+		    	{
+			    	rowLength++; //now add the one col for disease state
+		    		int[] row = new int[rowLength];
+		    		int rowIndex = 0;
+		    		for(int i = 0; i < stringArrs.length; i++)
 		    		{
-		    			row[rowIndex] = Integer.parseInt(stringArrs[i][j]);
-		    			rowIndex++;
+		    			for(int j = 0; j < (stringArrs[i].length-1); j++)
+			    		{
+			    			row[rowIndex] = Integer.parseInt(stringArrs[i][j]);
+			    			rowIndex++;
+			    		}
 		    		}
+		    		row[row.length-1] = Integer.parseInt(stringArrs[0][stringArrs[0].length-1]); //add the disease state
+		    		data.add(row);
+		    	}
+	    		if(firstLine == true)
+	    		{
+	    			firstLine = false;
 	    		}
-	    		row[row.length-1] = Integer.parseInt(stringArrs[0][stringArrs[0].length-1]); //add the disease state
-	    		data.add(row);
 		    }
 		    //Close the input streams
 		    for(int i = 0; i < filePaths.length; i++)
@@ -69,7 +75,7 @@ public class Parser {
 		}
 		catch (Exception e)
 		{//Catch exception if any
-		      System.err.println("Error: " + e.getMessage());
+		    System.err.println("Error: " + e.getMessage());
 		}
 		return finalData;
 	}

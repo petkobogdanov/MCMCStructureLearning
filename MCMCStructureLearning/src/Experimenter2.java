@@ -1,15 +1,14 @@
 import java.io.File;
-import java.util.ArrayList;
 
 
 public class Experimenter2 {
 
-	private static int MixingSteps = 20000;
+	private static int MixingSteps = 10000;
 	private static int RunningSteps = 100000;
-	private static boolean AIC = false;
-	private static boolean BIC = false;
-	private static boolean RandomScore = false;
-	private static boolean UseFirstLine = true; //whether or not to use the first line of the Data files
+	private static boolean AIC = true;
+	private static boolean BIC = true;
+	private static boolean RandomScore = true;
+	private static boolean UseFirstLine = false; //whether or not to use the first line of the Data files
 	
 	//don't set these--they're set in the code
 	private static int NumDiseaseStates;
@@ -21,7 +20,7 @@ public class Experimenter2 {
 	public static void main(String[] args) {
 		//The program runs MCMCStructureLearning and PrecisionAndRecallCalc on every file contained in the current directory and any sub-directories (it keeps going 
 		//into sub-directories until it has reached the bottom of the directory tree).
-		//For every file it encounters, it creates a folder of the same name in the same directory as the file and puts all output for this file in this folder.
+		//For every file it encounters, it creates a folder with name <file name>_results in the same directory as the file and puts all output for this file in this folder.
 		//each run of MCMC uses a different scoring method, and various alpha values may be given in the arguments to this program
 		//learned network naming convention: <scoring method>_<alpha>_LearnedNetwork where the "_<alpha>" is only included for BDeu scores
 		//final output naming convention: <scoring method>_<alpha>_PrecisionAndRecall where the "_<alpha>" is only included for BDeu scores
@@ -91,8 +90,19 @@ public class Experimenter2 {
 
 	private static void ProcessFile(File file) 
 	{
+		//make sure it's not the jar file we're running
+		String extension = "";
+		String fileName = file.getName();
+		int index = fileName.lastIndexOf('.');
+		if (index > 0) {
+		    extension = fileName.substring(index+1);
+		}
+		if(extension.equals("jar"))
+		{
+			return;
+		}
 		//create new directory with same name as file
-		File newDir = new File(file.getAbsolutePath());
+		File newDir = new File(file.getAbsolutePath()+"_results");
 		newDir.mkdir();
 		//run MCMC and PrecisionRecallCalc once for each scoring method
 		for(int i = 0; i < ScoringMethods.length; i++)

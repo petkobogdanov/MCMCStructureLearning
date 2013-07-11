@@ -18,9 +18,9 @@ public class Experimenter2 {
 	private static String PathToCorrectNetwork;
 
 	public static void main(String[] args) {
-		//The program runs MCMCStructureLearning and PrecisionAndRecallCalc on every file contained in the current directory and any sub-directories (it keeps going 
+		//The program runs MCMCStructureLearning and PrecisionAndRecallCalc on every .txt file contained in the current directory and any sub-directories (it keeps going 
 		//into sub-directories until it has reached the bottom of the directory tree).
-		//For every file it encounters, it creates a folder with name <file name>_results in the same directory as the file and puts all output for this file in this folder.
+		//For every .txt file it encounters, it creates a folder with name <file name>_results in the same directory as the file and puts all output for this file in this folder.
 		//each run of MCMC uses a different scoring method, and various alpha values may be given in the arguments to this program
 		//learned network naming convention: <scoring method>_<alpha>_LearnedNetwork where the "_<alpha>" is only included for BDeu scores
 		//final output naming convention: <scoring method>_<alpha>_PrecisionAndRecall where the "_<alpha>" is only included for BDeu scores
@@ -97,7 +97,7 @@ public class Experimenter2 {
 		if (index > 0) {
 		    extension = fileName.substring(index+1);
 		}
-		if(extension.equals("jar"))
+		if(!extension.equals("txt"))
 		{
 			return;
 		}
@@ -117,7 +117,7 @@ public class Experimenter2 {
 			mcmcArgs[4] = Integer.toString(NumAlleleCodes);
 			mcmcArgs[5] = file.getAbsolutePath();
 			mcmcArgs[6] = Boolean.toString(UseFirstLine);
-			String outputFilePrefix = newDir.getAbsolutePath()+"\\"+ScoringMethods[i];
+			String outputFilePrefix = newDir.getAbsolutePath()+"/"+ScoringMethods[i];
 			if(ScoringMethods[i].equals("BDeu"))
 			{
 				outputFilePrefix=outputFilePrefix+"_"+Double.toString(Alphas[i]);

@@ -34,53 +34,37 @@ public class BDeu extends Scorer{
 				sumNJK = sumNJK + NJK;
 			}
 			
-			double denominator_term1 = Gamma.gamma(alpha_numconfigs + sumNJK);
-			if (Double.isInfinite(denominator_term1))
-			{
-				denominator_term1 = Double.MAX_VALUE;
-			}
-			term1 = Gamma.gamma(alpha_numconfigs)/denominator_term1;
+			double denominator_term1 = Gamma.logGamma(alpha_numconfigs + sumNJK);
+			
+			term1 = Gamma.logGamma(alpha_numconfigs)-denominator_term1;
+			term1 = Math.exp(term1);
 			// term one of BDeu formula
 			
 			term2 = 1;
 			
 			for (int k=0; k<DiseaseStates; k++)
 			{ 
-
 				NJK = configCounts.get(j).diseaseCounts[k];
+				double numerator_term2 = Gamma.logGamma(alpha_disease_numconfigs+NJK);
 				
-				double numerator_term2 = Gamma.gamma(alpha_disease_numconfigs+NJK);
-				if (Double.isInfinite(numerator_term2))
-				{
-					numerator_term2 = Double.MAX_VALUE;
-				}
-				
-				term2 = term2*(numerator_term2/Gamma.gamma(alpha_disease_numconfigs));
+				term2 = term2*(Math.exp(numerator_term2 - Gamma.logGamma(alpha_disease_numconfigs)));
 				// term2 of BDeu formula
 			}
 			
-			//if (Double.isInfinite(term1))
-			//{
-			//	term1 = Double.MAX_VALUE;
-			//}
 			if (Double.isInfinite(term2))
+			// check if term2 is infinity
 			{
 				term2 = Double.MAX_VALUE;
 			}
-			score = score * term1 * term2;
+			
+			// finally, find the product of all the terms
+			score = score * term1 * term2;	
 		}
-		
-		//System.out.println(alpha_numconfigs);
-		//System.out.println(Gamma.gamma(1.7));
-		//System.out.println(score);
 		return score;
-		
-		
 	}
 
 	@Override
 	double getProbOfData(double score) {
 		return score;
 	}
-
 }

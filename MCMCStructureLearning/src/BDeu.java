@@ -22,8 +22,8 @@ public class BDeu extends Scorer{
 		
 		ArrayList<TreeNode> configCounts = getParentConfigurationCounts(parents);
 		
-		double alpha_numconfigs = alpha/getNumConfigurations();
-		double alpha_disease_numconfigs = alpha/(DiseaseStates*getNumConfigurations());
+		double alpha_numconfigs = Alpha/getNumConfigurations();
+		double alpha_disease_numconfigs = Alpha/(DiseaseStates*getNumConfigurations());
 		
 		for (int j=0; j<getNumConfigurations(); j++)
 		{
@@ -60,7 +60,11 @@ public class BDeu extends Scorer{
 			}
 			
 			// finally, find the product of all the terms
-			score = score * term1 * term2;	
+			score = score * term2 * term1;	//multiply in this order to avoid underflow(term2 is bigger than term1)
+			if(score == 0)
+			{
+				score = Double.MIN_VALUE;
+			}
 		}
 		return score;
 	}

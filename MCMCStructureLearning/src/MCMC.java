@@ -40,7 +40,7 @@ public abstract class MCMC {
 		}
 		int[][] data = p.Parse(files, useFirstLine);
 		if(data != null)
-		{
+		{			
 			System.out.println("Number of snps: "+(data[0].length - 1));
 			int numSNPs = data[0].length - 1;
 			//parse integer arguments
@@ -75,6 +75,10 @@ public abstract class MCMC {
 			else if(args[0].equals("BDeu"))
 			{
 				s = new BDeu(data, alleleStates, diseaseStates, alpha);
+			}
+			else if(args[0].equals("LogBDeu"))
+			{
+				s = new LogBDeu(data, alleleStates, diseaseStates, alpha);
 			}
 			else if(args[0].equals("Random"))
 			{

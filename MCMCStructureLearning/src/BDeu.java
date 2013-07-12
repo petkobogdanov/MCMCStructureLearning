@@ -38,7 +38,10 @@ public class BDeu extends Scorer{
 			
 			term1 = Gamma.logGamma(alpha_numconfigs)-denominator_term1;
 			term1 = Math.exp(term1);
-			// term one of BDeu formula
+			if(term1 == 0)
+			{ //it should never be 0 because the numerator is always positive
+				term1 = Double.MIN_VALUE;
+			}
 			
 			term2 = 1;
 			
@@ -48,7 +51,6 @@ public class BDeu extends Scorer{
 				double numerator_term2 = Gamma.logGamma(alpha_disease_numconfigs+NJK);
 				
 				term2 = term2*(Math.exp(numerator_term2 - Gamma.logGamma(alpha_disease_numconfigs)));
-				// term2 of BDeu formula
 			}
 			
 			if (Double.isInfinite(term2))

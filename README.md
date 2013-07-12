@@ -13,3 +13,5 @@ This runs MCMCStructureLearning and then PrecisionAndRecallCalc successively on 
 
 4. Experimenter2
 The program runs MCMCStructureLearning and PrecisionAndRecallCalc on every .txt file contained in the current directory and any sub-directories (it keeps going into sub-directories until it has reached the bottom of the directory tree).  For every .txt file it encounters, it creates a folder with name <file name>_results in the same directory as the file and puts all output for this file in this folder.  It runs MCMCStructureLearning and PrecisionAndRecallCalc once per scoring method on each file it encounters.
+
+There are two different BDeu scoring methods.  One of them tries to calculate the score directly using logGamma in only a few places.  When there is overflow or underflow it sets the value to Double.MAX_VALUE or Double.MIN_VALUE respectively.  This causes inaccuracies and the score sometimes still goes to 0.  LogBDeu calculates the log of the score and computes it as a sum of terms.  This removes the overflow and underflow problems.

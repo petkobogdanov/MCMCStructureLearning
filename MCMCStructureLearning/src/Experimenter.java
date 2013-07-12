@@ -7,7 +7,7 @@ public class Experimenter {
 	private static int RunningSteps = 100000;
 	private static boolean AIC = false;
 	private static boolean BIC = false;
-	private static boolean RandomScore = false;
+	private static boolean RandomScore = true;
 	private static boolean UseFirstLine = true; //whether or not to use the first line of the Data files
 
 	public static void main(String[] args) {
@@ -18,6 +18,7 @@ public class Experimenter {
 		//each run of MCMC uses a different scoring method, and various alpha values may be given in the arguments
 		//learned network naming convention: <path to network output directory>/<trial folder name>/<scoring method>_<alpha> where the "_<alpha>" is only included for BDeu scores
 		//final output naming convention: <path to final output directory>/<trial folder name>/<scoring method>_<alpha> where the "_<alpha>" is only included for BDeu scores
+		//the LogBDeu scoring method is used.
 		if(args.length < 8)
 		{
 			System.out.println("Arguments required: <number of disease states> <number of allele codes> <path to data folders> <number of data files> <data files> <path to network output directory> <path to correct network> <path to final output directory> <alpha values (optional)>");
@@ -60,7 +61,7 @@ public class Experimenter {
 			for(int i = 0; i < numAlphas; i++)
 			{
 				alphas[i] = Double.parseDouble(args[i+7+dataFiles.length]);
-				scoringMethods[i] = "BDeu";
+				scoringMethods[i] = "LogBDeu";
 			}
 		}
 		catch(NumberFormatException e)
@@ -123,9 +124,9 @@ public class Experimenter {
 				}
 				else
 				{
-					mcmcArgs[6+trialDataFiles.length] = Integer.toString(-1);
+					mcmcArgs[mcmcArgs.length-1] = Integer.toString(-1);
 				}
-				mcmcArgs[5+trialDataFiles.length] = networkOutputFile;
+				mcmcArgs[mcmcArgs.length-2] = networkOutputFile;
 				MCMC.main(mcmcArgs);
 				//runPrecisionRecallCalc
 				//args to PrecisionRecallCalc: <learned network file> <gold standard network file> <output file path>

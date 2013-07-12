@@ -25,6 +25,7 @@ public class Experimenter2 {
 		//learned network naming convention: <scoring method>_<alpha>_LearnedNetwork where the "_<alpha>" is only included for BDeu scores
 		//final output naming convention: <scoring method>_<alpha>_PrecisionAndRecall where the "_<alpha>" is only included for BDeu scores
 		//all files are assumed to have the same correct network file, which is given as an argument to this program
+		//the LogBDeu scoring method is used.
 		if(args.length < 3)
 		{
 			System.out.println("Arguments required: <number of disease states> <number of allele codes> <path to correct network> <alpha values (optional)>");
@@ -55,7 +56,7 @@ public class Experimenter2 {
 			for(int i = 0; i < numAlphas; i++)
 			{
 				Alphas[i] = Double.parseDouble(args[i+3]);
-				ScoringMethods[i] = "BDeu";
+				ScoringMethods[i] = "LogBDeu";
 			}
 			NumDiseaseStates = Integer.parseInt(args[0]);
 			NumAlleleCodes = Integer.parseInt(args[1]);

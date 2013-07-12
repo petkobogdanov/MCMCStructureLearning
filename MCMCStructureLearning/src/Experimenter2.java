@@ -119,7 +119,7 @@ public class Experimenter2 {
 			mcmcArgs[5] = file.getAbsolutePath();
 			mcmcArgs[6] = Boolean.toString(UseFirstLine);
 			String outputFilePrefix = newDir.getAbsolutePath()+"/"+ScoringMethods[i];
-			if(ScoringMethods[i].equals("BDeu"))
+			if(ScoringMethods[i].equals("LogBDeu"))
 			{
 				outputFilePrefix=outputFilePrefix+"_"+Double.toString(Alphas[i]);
 				mcmcArgs[8] = Double.toString(Alphas[i]);

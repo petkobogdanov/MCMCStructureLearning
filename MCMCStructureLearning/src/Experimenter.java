@@ -117,7 +117,7 @@ public class Experimenter {
 				}
 				mcmcArgs[mcmcArgs.length-3] = Boolean.toString(UseFirstLine);
 				String networkOutputFile = networkOutputFolder.getAbsolutePath()+"\\"+scoringMethods[i];
-				if(scoringMethods[i].equals("BDeu"))
+				if(scoringMethods[i].equals("LogBDeu"))
 				{
 					networkOutputFile=networkOutputFile+"_"+Double.toString(alphas[i]);
 					mcmcArgs[mcmcArgs.length-1] = Double.toString(alphas[i]);
@@ -132,7 +132,7 @@ public class Experimenter {
 				//args to PrecisionRecallCalc: <learned network file> <gold standard network file> <output file path>
 				String[] prcArgs = new String[3];
 				String finalOutputFile = finalOutputFolder.getAbsolutePath()+"\\"+scoringMethods[i];
-				if(scoringMethods[i].equals("BDeu"))
+				if(scoringMethods[i].equals("LogBDeu"))
 				{
 					finalOutputFile=finalOutputFile+"_"+Double.toString(alphas[i]);
 				}

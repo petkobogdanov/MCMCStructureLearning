@@ -3,8 +3,8 @@ import java.io.File;
 
 public class Experimenter2 {
 
-	private static int MixingSteps = 10000;
-	private static int RunningSteps = 100000;
+	private static int MixingSteps = 5000; //see this link for recommendations on Mixing and Running steps. http://www.nature.com/ng/journal/v39/n9/extref/ng2110-S1.pdf
+	private static int RunningSteps = 3000000;
 	private static boolean AIC = true;
 	private static boolean BIC = true;
 	private static boolean RandomScore = true;
@@ -143,6 +143,8 @@ public class Experimenter2 {
 	}
 
 	private static void ProcessDirectory(File dir) {
+		int numFilesProcessed = 0;
+		int maxToProcess = 5;
 		File[] contents = dir.listFiles();
 		for (File file : contents) //we don't need to worry about avoiding the directories we make because we get the list of files to explore before making any directories
 		{
@@ -152,7 +154,11 @@ public class Experimenter2 {
 	        } 
 	        else 
 	        {
-	            ProcessFile(file);
+	        	if(numFilesProcessed < maxToProcess)
+	        	{
+	        		ProcessFile(file);
+	        		numFilesProcessed++;
+	        	}
 	        }
 	    }
 	}

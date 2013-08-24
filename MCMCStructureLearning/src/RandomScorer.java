@@ -8,8 +8,13 @@ public class RandomScorer extends Scorer{
 	}
 
 	@Override
-	double score(ArrayList<Integer> parents) {
+	double calcScore(ArrayList<Integer> parents) {
 		return Math.random();
+	}
+	
+	public double score(ArrayList<Integer> parents)
+	{
+		return calcScore(parents);
 	}
 
 	@Override

@@ -6,16 +6,19 @@ import java.util.ArrayList;
 public class Parser {
 	
 	
-	public int[][] Parse(String[] filePaths, boolean useFirst)
+	public int[][] Parse(String[] filePaths, boolean useFirst, int numAlleleStates)
 	{
-		//assumes file format is: each row is a sample, each column is a snp, except the last, 
-		//which is the disease column, each entry separated by a single space
-		//if useFirst is true, then it assumes there is data on the first line, otherwise it skips the 
-		//first line of each file.
-		//all files must have the same number of lines and contain the disease state in the last column
-		//if multiple files are passed in, it will concatenate them into one large data set with the disease 
-		//state in the last column only
+		/**assumes file format is: each row is a sample, each column is a snp, except the last, 
+		 * which is the disease column, each entry separated by a single space
+		 * if useFirst is true, then it assumes there is data on the first line, otherwise it skips the 
+		 * first line of each file.
+		 * all files must have the same number of lines and contain the disease state in the last column
+		 * if multiple files are passed in, it will concatenate them into one large data set with the disease 
+		 * state in the last column only
+		 * missing data should be represented with a "?".
+		 */
 		int[][] finalData = null;
+		String[] strLines = new String[filePaths.length];
 		try
 		{
 
@@ -25,7 +28,7 @@ public class Parser {
 		    {
 		    	brs[i] = new BufferedReader(new FileReader(filePaths[i]));
 		    }
-		    String[] strLines = new String[filePaths.length];
+		    //String[] strLines = new String[filePaths.length];
 		    //Read Files Line By Line
 		    boolean firstLine = true;
 		    while ((strLines[0] = brs[0].readLine()) != null)   
@@ -40,7 +43,7 @@ public class Parser {
 		    		}
 		    		if(useFirst || !firstLine)
 		    		{
-		    			stringArrs[i] = strLines[i].split(" ");
+		    			stringArrs[i] = strLines[i].split("\t");
 		    			rowLength+=stringArrs[i].length-1; //subtract 1 because the last col is the disease state
 		    		}
 		    	}
@@ -53,7 +56,14 @@ public class Parser {
 		    		{
 		    			for(int j = 0; j < (stringArrs[i].length-1); j++)
 			    		{
-			    			row[rowIndex] = Integer.parseInt(stringArrs[i][j]);
+		    				if(stringArrs[i][j].equals("?"))
+		    				{
+		    					row[rowIndex] = numAlleleStates-1;
+		    				}
+		    				else
+		    				{
+		    					row[rowIndex] = Integer.parseInt(stringArrs[i][j]);
+		    				}
 			    			rowIndex++;
 			    		}
 		    		}
@@ -75,7 +85,7 @@ public class Parser {
 		}
 		catch (Exception e)
 		{//Catch exception if any
-		    System.err.println("Error: " + e.getMessage());
+		    System.err.println("Error: " + e.getMessage()+" : " + strLines[0].length());
 		}
 		return finalData;
 	}

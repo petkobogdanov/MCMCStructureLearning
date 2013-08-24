@@ -10,7 +10,7 @@ public class LogBDeu extends Scorer{
 	}
 
 	@Override
-	double score(ArrayList<Integer> parents) 
+	double calcScore(ArrayList<Integer> parents) 
 	{ //computes the log of the BDeu score
 		ArrayList<TreeNode> configCounts = getParentConfigurationCounts(parents);
 		double alpha_numconfigs = Alpha/getNumConfigurations();

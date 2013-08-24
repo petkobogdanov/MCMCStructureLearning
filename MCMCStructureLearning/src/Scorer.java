@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 
 
 public abstract class Scorer {
@@ -10,6 +12,7 @@ public abstract class Scorer {
 	public int AlleleStates;
 	public int DiseaseStates;
 	public double Alpha;
+	public static HashMap<String, Double> savedScores;
 	
 	public Scorer(int[][] data, int alleleStates, int diseaseStates, double a)
 	{
@@ -20,6 +23,7 @@ public abstract class Scorer {
 		AlleleStates = alleleStates;
 		DiseaseStates = diseaseStates;
 		Alpha=a;
+		savedScores = new HashMap<String, Double>(N);  //Assume that we will score at least as many networks as there are SNPs.
 	}
 	
 	public int getNumConfigurations()
@@ -138,8 +142,36 @@ public abstract class Scorer {
 		}
 		return head;
 	}
+	
+	private String getKey(ArrayList<Integer> parents)
+	{
+		String key = "|"; //put in the separator first so even an empty network will have a non-empty key
+		Collections.sort(parents); //sort the parent list so that every network only has one key
+		for(int i = 0; i < parents.size(); i++)
+		{
+			key = key+parents.get(i).toString()+"|";
+		}
+		return key;
+	}
 
-	abstract double score(ArrayList<Integer> parents);
+	public double score(ArrayList<Integer> parents)
+	{
+		String key = getKey(parents);
+		Double value = savedScores.get(key);
+		if(value != null)
+		{
+			return value.doubleValue();
+		}
+		else
+		{
+			double score = calcScore(parents);
+			savedScores.put(key, new Double(score));
+			return score;
+			
+		}
+	}
+	
+	abstract double calcScore(ArrayList<Integer> parents);
 	abstract double getProbOfData(double score);
 
 }

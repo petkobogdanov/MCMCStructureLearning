@@ -4,16 +4,25 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Random;
 
-
+/**
+ * 
+ * This implements the MCMC search method described in "Genetic studies of complex human diseases: Characterizing SNP-disease associations
+ * using Bayesian networks."  However, we have expanded it to use various scoring systems that calculate the probability of the data given 
+ * the network structure.
+ *
+ */
 public abstract class MCMC {
 	
 	public static double CurrentScore;
 	
 	public static void main(String[] args)
 	{
+		//get the start time so we know how long it takes
+		long start = System.currentTimeMillis();
+		
 		if(args.length < 9)
 		{
-			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes> <data files> <use first line: t/f> <output file> <alpha>");
+			System.out.println("Arguments required: <scoring method> <mixing steps> <running steps> <number of disease states> <number of allele codes (including \"?\" for missing data)> <data files> <use first line: t/f> <output file> <alpha>");
 			return;
 		}
 		//parse data
@@ -31,6 +40,25 @@ public abstract class MCMC {
 		{
 			System.out.println("Can not parse t/f argument for using first line.");
 			return;
+		}			
+		//parse integer arguments
+		int mixingSteps = 0;
+		int runningSteps = 0;
+		int diseaseStates = 0;
+		int alleleStates = 0;
+		double alpha = 0;
+		
+		try{
+			mixingSteps = Integer.parseInt(args[1]);
+			runningSteps = Integer.parseInt(args[2]);
+			diseaseStates = Integer.parseInt(args[3]);
+			alleleStates = Integer.parseInt(args[4]);
+			alpha = Double.parseDouble(args[args.length-1]);
+		}
+		catch(NumberFormatException e)
+		{
+			System.out.println("Can not parse integer arguments.");
+			return;
 		}
 		Parser p = new Parser();
 		String[] files = new String[args.length-8];
@@ -38,30 +66,11 @@ public abstract class MCMC {
 		{
 			files[i-5] = args[i];
 		}
-		int[][] data = p.Parse(files, useFirstLine);
+		int[][] data = p.Parse(files, useFirstLine, alleleStates);
 		if(data != null)
-		{			
+		{
 			System.out.println("Number of snps: "+(data[0].length - 1));
 			int numSNPs = data[0].length - 1;
-			//parse integer arguments
-			int mixingSteps = 0;
-			int runningSteps = 0;
-			int diseaseStates = 0;
-			int alleleStates = 0;
-			double alpha = 0;
-			
-			try{
-				mixingSteps = Integer.parseInt(args[1]);
-				runningSteps = Integer.parseInt(args[2]);
-				diseaseStates = Integer.parseInt(args[3]);
-				alleleStates = Integer.parseInt(args[4]);
-				alpha = Double.parseDouble(args[args.length-1]);
-			}
-			catch(NumberFormatException e)
-			{
-				System.out.println("Can not parse integer arguments.");
-				return;
-			}
 			//parse score function argument
 			Scorer s = null;
 			if(args[0].equals("AIC"))
@@ -125,6 +134,8 @@ public abstract class MCMC {
 				} 
 			}
 		}
+		long end = System.currentTimeMillis();
+		System.out.println((end - start) + " ms");
 		return;
 	}
 	
@@ -181,7 +192,7 @@ public abstract class MCMC {
 			return parents;
 		}
 	}
-	
+
 	private static ArrayList<Integer> GenerateNeighborBNCapped(
 			ArrayList<Integer> parents, int numSNPs) {
 		if(parents.size() < 4)

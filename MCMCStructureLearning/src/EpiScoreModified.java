@@ -47,9 +47,10 @@ public class EpiScoreModified extends Scorer{
 	 * g2 statistic using the same set of parents.  So, the variance depends on teh particular parent
 	 * set and not just the size of the parent set.
 	 */
-	double score(ArrayList<Integer> parents) 
+	double calcScore(ArrayList<Integer> parents) 
 	{
-		return (0.5)*(gSquared(parents) - gSquaredVar(parents)) + emptyNetworkScore;
+		double score = (0.5)*(gSquared(parents) - gSquaredVar(parents)) + emptyNetworkScore;
+		return score;
 	}
 
 	@Override

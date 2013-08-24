@@ -11,12 +11,9 @@ public class BDeu extends Scorer{
 
 	
 	@Override
-	
 	// produces the BDeu score of the BN where q=number of configurations, r=DiseaseStates, 
 	// NJK=number of times parents takes jth configuration and X=k, alpha= given alpha value
-
-	
-	double score(ArrayList<Integer> parents) {
+	double calcScore(ArrayList<Integer> parents) {
 		double score = 1;
 		double term1=0, term2=1, NJK = 0;
 		

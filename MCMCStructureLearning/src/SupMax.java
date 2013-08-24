@@ -16,7 +16,7 @@ public class SupMax extends Scorer{
 	}
 
 	@Override
-	double score(ArrayList<Integer> parents) 
+	double calcScore(ArrayList<Integer> parents) 
 	{ //returns the maximum value over all parent configurations of SupMaxPair, unless size of parents is 0 or 1
 		//when it is 0, the score is 0
 		//when it is 1, the score is max over all genotypes of abs(frequency in cases minus frequency in controls)

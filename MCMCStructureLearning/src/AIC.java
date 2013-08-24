@@ -8,7 +8,7 @@ public class AIC extends Scorer{
 	}
 
 	@Override
-	double score(ArrayList<Integer> parents) {
+	public double calcScore(ArrayList<Integer> parents) {
 		//returns the AIC score of the LDS: the disease status node and the edges to it.  The LDS does not include the snp nodes.
 		double score = getLikelihood(parents);
 		score = score-getNumConfigurations()*(DiseaseStates-1);

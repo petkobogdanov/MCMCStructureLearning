@@ -8,9 +8,10 @@ public class BIC extends Scorer{
 	}
 
 	@Override
-	double score(ArrayList<Integer> parents) {
+	double calcScore(ArrayList<Integer> parents) {
 		double score = getLikelihood(parents);
-		return score-Math.log((double)M)*getNumConfigurations()*(DiseaseStates-1)/2;
+		score = score-Math.log((double)M)*getNumConfigurations()*(DiseaseStates-1)/2;
+		return score;
 	}
 
 	@Override

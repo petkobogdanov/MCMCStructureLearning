@@ -40,7 +40,7 @@ public class EpiScore extends Scorer{
 	}
 	
 	@Override
-	double score(ArrayList<Integer> parents) 
+	double calcScore(ArrayList<Integer> parents) 
 	{
 		double var = gSquaredVar(parents.size());
 		if(parents.size() > 0 && var < gSquaredVar(parents.size()-1))
